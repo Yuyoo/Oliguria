@@ -2,27 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="de320e2c-1199-4438-bb1a-89664c236b02" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/information_schema.FNRwLQ.zip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/mimiciii.PuBErQ.zip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/pg_catalog.0S1ZNQ.zip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/public.abK9xQ.zip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/information_schema.FNRwLQ.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/mimiciii.PuBErQ.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/pg_catalog.0S1ZNQ.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/pg_temp_1.zkWuFg.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/pg_toast.33HYYw.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/pg_toast_temp_1.5ixBaA.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c/storage_v2/_src_/database/mimic.K2MxBg/schema/public.abK9xQ.meta" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SQL/query/chartevents.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SQL/query/corhortdefination.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/f65edc44-6213-44aa-924c-dcd4c2b50e7c.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/view/echodata.sql" afterPath="$PROJECT_DIR$/SQL/view/echodata.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/view/kdigo-uo.sql" afterPath="$PROJECT_DIR$/SQL/view/kdigo-uo.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/view/urineoutput.sql" afterPath="$PROJECT_DIR$/SQL/view/urineoutput.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SQL/view/weightdurations.sql" afterPath="$PROJECT_DIR$/SQL/view/weightdurations.sql" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -171,6 +151,14 @@
       <option name="presentableId" value="Default" />
       <updated>1513789425551</updated>
     </task>
+    <task id="LOCAL-00001" summary="chartevents and corhort">
+      <created>1513789585380</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513789585380</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
