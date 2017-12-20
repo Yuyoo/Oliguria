@@ -4,71 +4,77 @@
 
 DROP MATERIALIZED VIEW IF EXISTS ECHODATA CASCADE;
 CREATE MATERIALIZED VIEW ECHODATA AS
-select ROW_ID
-  , subject_id, hadm_id
-  , chartdate
+  SELECT
+    ROW_ID,
+    subject_id,
+    hadm_id,
+    chartdate
 
-  -- charttime is always null for echoes..
-  -- however, the time is available in the echo text, e.g.:
-  -- , substring(ne.text, 'Date/Time: [\[\]0-9*-]+ at ([0-9:]+)') as TIMESTAMP
-  -- we can therefore impute it and re-create charttime
-  , cast(to_timestamp( (to_char( chartdate, 'DD-MM-YYYY' ) || substring(ne.text, 'Date/Time: [\[\]0-9*-]+ at ([0-9:]+)')),
-            'DD-MM-YYYYHH24:MI') as timestamp without time zone)
-    as charttime
+    -- charttime is always null for echoes..
+    -- however, the time is available in the echo text, e.g.:
+    -- , substring(ne.text, 'Date/Time: [\[\]0-9*-]+ at ([0-9:]+)') as TIMESTAMP
+    -- we can therefore impute it and re-create charttime
+    ,
+    cast(to_timestamp((to_char(chartdate, 'DD-MM-YYYY') || substring(ne.text, 'Date/Time: [\[\]0-9*-]+ at ([0-9:]+)')),
+                      'DD-MM-YYYYHH24:MI') AS TIMESTAMP WITHOUT TIME ZONE)
+                                                     AS charttime
 
-  -- explanation of below substring:
-  --  'Indication: ' - matched verbatim
-  --  (.*?) - match any character
-  --  \n - the end of the line
-  -- substring only returns the item in ()s
-  -- note: the '?' makes it non-greedy. if you exclude it, it matches until it reaches the *last* \n
+    -- explanation of below substring:
+    --  'Indication: ' - matched verbatim
+    --  (.*?) - match any character
+    --  \n - the end of the line
+    -- substring only returns the item in ()s
+    -- note: the '?' makes it non-greedy. if you exclude it, it matches until it reaches the *last* \n
 
-  , substring(ne.text, 'Indication: (.*?)\n') as Indication
+    ,
+    substring(ne.text, 'Indication: (.*?)\n')        AS Indication
 
-  -- sometimes numeric values contain de-id text, e.g. [** Numeric Identifier **]
-  -- this removes that text
-  , case
-      when substring(ne.text, 'Height: \(in\) (.*?)\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'Height: \(in\) (.*?)\n') as numeric)
-    end as Height
+    -- sometimes numeric values contain de-id text, e.g. [** Numeric Identifier **]
+    -- this removes that text
+    ,
+    CASE
+    WHEN substring(ne.text, 'Height: \(in\) (.*?)\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'Height: \(in\) (.*?)\n') AS NUMERIC)
+    END                                              AS Height,
+    CASE
+    WHEN substring(ne.text, 'Weight \(lb\): (.*?)\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'Weight \(lb\): (.*?)\n') AS NUMERIC)
+    END                                              AS Weight,
+    CASE
+    WHEN substring(ne.text, 'BSA \(m2\): (.*?) m2\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'BSA \(m2\): (.*?) m2\n') AS NUMERIC)
+    END                                              AS BSA -- ends in 'm2'
 
-  , case
-      when substring(ne.text, 'Weight \(lb\): (.*?)\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'Weight \(lb\): (.*?)\n') as numeric)
-    end as Weight
+    ,
+    substring(ne.text, 'BP \(mm Hg\): (.*?)\n')      AS BP -- Sys/Dias
 
-  , case
-      when substring(ne.text, 'BSA \(m2\): (.*?) m2\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'BSA \(m2\): (.*?) m2\n') as numeric)
-    end as BSA -- ends in 'm2'
+    ,
+    CASE
+    WHEN substring(ne.text, 'BP \(mm Hg\): ([0-9]+)/[0-9]+?\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'BP \(mm Hg\): ([0-9]+)/[0-9]+?\n') AS NUMERIC)
+    END                                              AS BPSys -- first part of fraction
 
-  , substring(ne.text, 'BP \(mm Hg\): (.*?)\n') as BP -- Sys/Dias
+    ,
+    CASE
+    WHEN substring(ne.text, 'BP \(mm Hg\): [0-9]+/([0-9]+?)\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'BP \(mm Hg\): [0-9]+/([0-9]+?)\n') AS NUMERIC)
+    END                                              AS BPDias -- second part of fraction
 
-  , case
-      when substring(ne.text, 'BP \(mm Hg\): ([0-9]+)/[0-9]+?\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'BP \(mm Hg\): ([0-9]+)/[0-9]+?\n') as numeric)
-    end as BPSys -- first part of fraction
-
-  , case
-      when substring(ne.text, 'BP \(mm Hg\): [0-9]+/([0-9]+?)\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'BP \(mm Hg\): [0-9]+/([0-9]+?)\n') as numeric)
-    end as BPDias -- second part of fraction
-
-  , case
-      when substring(ne.text, 'HR \(bpm\): ([0-9]+?)\n') like '%*%'
-        then null
-      else cast(substring(ne.text, 'HR \(bpm\): ([0-9]+?)\n') as numeric)
-    end as HR
-
-  , substring(ne.text, 'Status: (.*?)\n') as Status
-  , substring(ne.text, 'Test: (.*?)\n') as Test
-  , substring(ne.text, 'Doppler: (.*?)\n') as Doppler
-  , substring(ne.text, 'Contrast: (.*?)\n') as Contrast
-  , substring(ne.text, 'Technical Quality: (.*?)\n') as TechnicalQuality
-from noteevents ne
-where category = 'Echo';
+    ,
+    CASE
+    WHEN substring(ne.text, 'HR \(bpm\): ([0-9]+?)\n') LIKE '%*%'
+      THEN NULL
+    ELSE cast(substring(ne.text, 'HR \(bpm\): ([0-9]+?)\n') AS NUMERIC)
+    END                                              AS HR,
+    substring(ne.text, 'Status: (.*?)\n')            AS Status,
+    substring(ne.text, 'Test: (.*?)\n')              AS Test,
+    substring(ne.text, 'Doppler: (.*?)\n')           AS Doppler,
+    substring(ne.text, 'Contrast: (.*?)\n')          AS Contrast,
+    substring(ne.text, 'Technical Quality: (.*?)\n') AS TechnicalQuality
+  FROM noteevents ne
+  WHERE category = 'Echo';
