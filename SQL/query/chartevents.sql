@@ -39,13 +39,13 @@ CREATE MATERIALIZED VIEW oliguria_chartevents AS
     max(CASE
         WHEN itemid IN (646, 220277) AND valuenum > 0 AND valuenum <= 100
           THEN valuenum
-        ELSE NULL END) AS SpO2,
+        ELSE NULL END) AS SpO2
     -- SpO2 氧饱和度
-    max(CASE
-        WHEN itemid IN (807, 811, 1529, 3745, 3744, 225664, 220621, 226537) AND valuenum > 0
-          THEN valuenum
-        ELSE NULL END) AS Glucose -- Glucose 血糖
-  FROM public.oliguria og
+--     max(CASE
+--         WHEN itemid IN (807, 811, 1529, 3745, 3744, 225664, 220621, 226537) AND valuenum > 0
+--           THEN valuenum
+--         ELSE NULL END) AS Glucose -- Glucose 血糖
+  FROM oliguria og
     LEFT JOIN chartevents ce
       ON og.subject_id = ce.subject_id AND og.hadm_id = ce.hadm_id AND og.icustay_id = ce.icustay_id
          AND ce.charttime BETWEEN og.intime AND og.uo_charttime2
@@ -91,15 +91,15 @@ CREATE MATERIALIZED VIEW oliguria_chartevents AS
                              -- SPO2, peripheral
                              646, 220277,
 
-                             -- GLUCOSE, both lab and fingerstick
-                             807, --	Fingerstick Glucose
-                             811, --	Glucose (70-105)
-                             1529, --	Glucose
-                             3745, --	BloodGlucose
-          3744, --	Blood Glucose
-          225664, --	Glucose finger stick
-          220621, --	Glucose (serum)
-          226537, --	Glucose (whole blood)
+--                              -- GLUCOSE, both lab and fingerstick
+--                              807, --	Fingerstick Glucose
+--                              811, --	Glucose (70-105)
+--                              1529, --	Glucose
+--                              3745, --	BloodGlucose
+--           3744, --	Blood Glucose
+--           225664, --	Glucose finger stick
+--           220621, --	Glucose (serum)
+--           226537, --	Glucose (whole blood)
 
           -- TEMPERATURE
           223762, -- "Temperature Celsius"
