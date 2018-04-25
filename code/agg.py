@@ -9,4 +9,4 @@ ce0_grouped = ce0.drop(['icustay_id', 'charthour'], axis=1).groupby(ce0['icustay
 ce0_max = ce0_grouped.max().rename(columns=lambda x: x + '_max')
 ce0_min = ce0_grouped.min().rename(columns=lambda x: x + '_min')
 result = pd.concat([ce0, ce0_max, ce0_min], axis=1)
-print(ce0_hr_max)
+print(result)

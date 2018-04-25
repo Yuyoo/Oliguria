@@ -1,10 +1,28 @@
-DROP MATERIALIZED VIEW IF EXISTS oliguria_chartevents;
+DROP MATERIALIZED VIEW
+IF
+	EXISTS oliguria_chartevents CASCADE;
 CREATE MATERIALIZED VIEW oliguria_chartevents AS
-  SELECT
-    og.subject_id,
-    og.hadm_id,
-    og.icustay_id,
-    ce.charttime,
+WITH base as (
+SELECT obc.*,
+case when obc.icustay_id in (
+SELECT icustay_id FROM oliguria og
+WHERE og.los_og >=24)
+then (og.og_starttime - interval '24' hour) 
+else obc.intime
+end as starttime
+, og.og_starttime
+, case 
+WHEN obc.icustay_id in (
+SELECT icustay_id FROM oliguria og
+WHERE og.los_og >=24)
+then 1
+else 0
+end as og_label
+FROM oliguria_base_cohort obc
+left join oliguria og
+on obc.icustay_id = og.icustay_id
+)
+SELECT base.subject_id,base.hadm_id,base.icustay_id,base.og_label,base.starttime,base.og_starttime,ce.charttime,
     max(CASE
         WHEN itemid IN (211, 220045) AND valuenum > 0 AND valuenum < 300
           THEN valuenum
@@ -40,73 +58,68 @@ CREATE MATERIALIZED VIEW oliguria_chartevents AS
         WHEN itemid IN (646, 220277) AND valuenum > 0 AND valuenum <= 100
           THEN valuenum
         ELSE NULL END) AS SpO2
-    -- SpO2 氧饱和度
---     max(CASE
---         WHEN itemid IN (807, 811, 1529, 3745, 3744, 225664, 220621, 226537) AND valuenum > 0
---           THEN valuenum
---         ELSE NULL END) AS Glucose -- Glucose 血糖
-  FROM oliguria og
-    LEFT JOIN chartevents ce
-      ON og.subject_id = ce.subject_id AND og.hadm_id = ce.hadm_id AND og.icustay_id = ce.icustay_id
-         AND ce.charttime BETWEEN og.intime AND og.uo_charttime2
-  WHERE ce.itemid IN
-        (
-          -- HEART RATE
-          211, --"Heart Rate"
-               220045, --"Heart Rate"
+FROM base 
+left join chartevents ce
+on base.icustay_id = ce.icustay_id
+and ce.charttime BETWEEN base.starttime and base.og_starttime
+and ce.error IS DISTINCT FROM 1
+where ce.itemid in
+  (
+  -- HEART RATE
+  211, -- "Heart Rate"
+  220045, -- "Heart Rate"
 
-               -- Systolic/diastolic
+  -- Systolic/diastolic
 
-               51, --	Arterial BP [Systolic]
-               442, --	Manual BP [Systolic]
-               455, --	NBP [Systolic]
-               6701, --	Arterial BP #2 [Systolic]
-               220179, --	Non Invasive Blood Pressure systolic
-               220050, --	Arterial Blood Pressure systolic
+  51, -- Arterial BP [Systolic]
+  442, -- Manual BP [Systolic]
+  455, -- NBP [Systolic]
+  6701, -- Arterial BP #2 [Systolic]
+  220179, -- Non Invasive Blood Pressure systolic
+  220050, -- Arterial Blood Pressure systolic
 
-               8368, --	Arterial BP [Diastolic]
-               8440, --	Manual BP [Diastolic]
-               8441, --	NBP [Diastolic]
-                     8555, --	Arterial BP #2 [Diastolic]
-                     220180, --	Non Invasive Blood Pressure diastolic
-                     220051, --	Arterial Blood Pressure diastolic
+  8368, -- Arterial BP [Diastolic]
+  8440, -- Manual BP [Diastolic]
+  8441, -- NBP [Diastolic]
+  8555, -- Arterial BP #2 [Diastolic]
+  220180, -- Non Invasive Blood Pressure diastolic
+  220051, -- Arterial Blood Pressure diastolic
 
 
-                     -- MEAN ARTERIAL PRESSURE
-                     456, --"NBP Mean"
-                     52, --"Arterial BP Mean"
-                     6702, --	Arterial BP Mean #2
-                     443, --	Manual BP Mean(calc)
-                     220052, --"Arterial Blood Pressure mean"
-                     220181, --"Non Invasive Blood Pressure mean"
-                     225312, --"ART BP mean"
+  -- MEAN ARTERIAL PRESSURE
+  456, -- "NBP Mean"
+  52, -- "Arterial BP Mean"
+  6702, -- Arterial BP Mean #2
+  443, -- Manual BP Mean(calc)
+  220052, -- "Arterial Blood Pressure mean"
+  220181, -- "Non Invasive Blood Pressure mean"
+  225312, -- "ART BP mean"
 
-                             -- RESPIRATORY RATE
-                             618, --	Respiratory Rate
-                             615, --	Resp Rate (Total)
-                             220210, --	Respiratory Rate
-                             224690, --	Respiratory Rate (Total)
-
-
-                             -- SPO2, peripheral
-                             646, 220277,
-
---                              -- GLUCOSE, both lab and fingerstick
---                              807, --	Fingerstick Glucose
---                              811, --	Glucose (70-105)
---                              1529, --	Glucose
---                              3745, --	BloodGlucose
---           3744, --	Blood Glucose
---           225664, --	Glucose finger stick
---           220621, --	Glucose (serum)
---           226537, --	Glucose (whole blood)
-
-          -- TEMPERATURE
-          223762, -- "Temperature Celsius"
-          676, -- "Temperature C"
-          223761, -- "Temperature Fahrenheit"
-          678 --	"Temperature F"
-        )
-  GROUP BY og.subject_id, og.hadm_id, og.icustay_id, ce.charttime
+  -- RESPIRATORY RATE
+  618,-- Respiratory Rate
+  615,-- Resp Rate (Total)
+  220210,-- Respiratory Rate
+  224690, -- Respiratory Rate (Total)
 
 
+  -- SPO2, peripheral
+  646, 220277,
+
+--   -- GLUCOSE, both lab and fingerstick
+--   807,-- Fingerstick Glucose
+--   811,-- Glucose (70-105)
+--   1529,-- Glucose
+--   3745,-- BloodGlucose
+--   3744,-- Blood Glucose
+--   225664,-- Glucose finger stick
+--   220621,-- Glucose (serum)
+--   226537,-- Glucose (whole blood)
+
+  -- TEMPERATURE
+  223762, -- "Temperature Celsius"
+  676,	-- "Temperature C"
+  223761, -- "Temperature Fahrenheit"
+  678 -- "Temperature F"
+
+  )
+	GROUP BY base.subject_id,base.hadm_id,base.icustay_id,base.starttime,ce.charttime,base.og_label,base.og_starttime

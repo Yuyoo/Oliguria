@@ -1,0 +1,100 @@
+digraph Tree84 {
+	split0 [label="split_feature_name:glucose_max
+threshold:240.50000000000003"]
+	split1 [label="split_feature_name:alt_max
+threshold:21.500000000000004"]
+	split8 [label="split_feature_name:diasbp_max
+threshold:72.50000000000001"]
+	leaf0 [label="leaf_index:0
+leaf_value:0.0048981834323228"]
+	split8 -> leaf0 [label="<="]
+	leaf9 [label="leaf_index:9
+leaf_value:-0.020595988820039112"]
+	split8 -> leaf9 [label=">"]
+	split1 -> split8 [label="<="]
+	split2 [label="split_feature_name:bun_min
+threshold:15.500000000000002"]
+	split3 [label="split_feature_name:bicarbonate_min
+threshold:26.500000000000004"]
+	split10 [label="split_feature_name:aptt_min
+threshold:42.35"]
+	split14 [label="split_feature_name:arterialwbc_max
+threshold:13.050000000000002"]
+	leaf2 [label="leaf_index:2
+leaf_value:-0.01328026411544361"]
+	split14 -> leaf2 [label="<="]
+	leaf15 [label="leaf_index:15
+leaf_value:-0.03698367469534081"]
+	split14 -> leaf15 [label=">"]
+	split10 -> split14 [label="<="]
+	leaf11 [label="leaf_index:11
+leaf_value:0.00012134541059142392"]
+	split10 -> leaf11 [label=">"]
+	split3 -> split10 [label="<="]
+	leaf4 [label="leaf_index:4
+leaf_value:0.01763996365039253"]
+	split3 -> leaf4 [label=">"]
+	split2 -> split3 [label="<="]
+	split4 [label="split_feature_name:calcium_max
+threshold:1.0550000000000004"]
+	split6 [label="split_feature_name:lactate_min
+threshold:3.4500000000000006"]
+	split12 [label="split_feature_name:sysbp_max
+threshold:135.50000000000003"]
+	leaf3 [label="leaf_index:3
+leaf_value:0.003974042862596925"]
+	split12 -> leaf3 [label="<="]
+	leaf13 [label="leaf_index:13
+leaf_value:-0.01701309667543355"]
+	split12 -> leaf13 [label=">"]
+	split6 -> split12 [label="<="]
+	split11 [label="split_feature_name:arterialph_max
+threshold:7.3950000000000005"]
+	split13 [label="split_feature_name:sysbp_max
+threshold:148.50000000000003"]
+	split15 [label="split_feature_name:aptt_min
+threshold:44.70000000000001"]
+	leaf7 [label="leaf_index:7
+leaf_value:-0.0022923672626541337"]
+	split15 -> leaf7 [label="<="]
+	leaf16 [label="leaf_index:16
+leaf_value:0.01681970450533986"]
+	split15 -> leaf16 [label=">"]
+	split13 -> split15 [label="<="]
+	leaf14 [label="leaf_index:14
+leaf_value:0.02425427711267152"]
+	split13 -> leaf14 [label=">"]
+	split11 -> split13 [label="<="]
+	leaf12 [label="leaf_index:12
+leaf_value:-0.006726733393915322"]
+	split11 -> leaf12 [label=">"]
+	split6 -> split11 [label=">"]
+	split4 -> split6 [label="<="]
+	split5 [label="split_feature_name:arterialph_min
+threshold:7.295000000000001"]
+	split7 [label="split_feature_name:sysbp_max
+threshold:145.50000000000003"]
+	leaf5 [label="leaf_index:5
+leaf_value:0.013069741324837037"]
+	split7 -> leaf5 [label="<="]
+	leaf8 [label="leaf_index:8
+leaf_value:-0.014652336234798382"]
+	split7 -> leaf8 [label=">"]
+	split5 -> split7 [label="<="]
+	split9 [label="split_feature_name:glucose_max
+threshold:202.50000000000003"]
+	leaf6 [label="leaf_index:6
+leaf_value:0.03298411241638043"]
+	split9 -> leaf6 [label="<="]
+	leaf10 [label="leaf_index:10
+leaf_value:0.01020207315521792"]
+	split9 -> leaf10 [label=">"]
+	split5 -> split9 [label=">"]
+	split4 -> split5 [label=">"]
+	split2 -> split4 [label=">"]
+	split1 -> split2 [label=">"]
+	split0 -> split1 [label="<="]
+	leaf1 [label="leaf_index:1
+leaf_value:-0.022473930577370137"]
+	split0 -> leaf1 [label=">"]
+}
