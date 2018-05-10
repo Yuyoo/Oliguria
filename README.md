@@ -17,3 +17,10 @@
 ||pH|50820|动脉血pH|
 ||Lactate|50813|乳酸|
 ||Base Excess|50802|碱剩余|
+
+## Repo
+
+SQL：数据提取代码
+code：python文件(部分)
+data：数据存放文件夹
+notebookcode：jupyter notebook代码(主要代码)
