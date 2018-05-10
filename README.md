@@ -20,7 +20,7 @@
 
 ## Repo
 
-SQL：数据提取代码
-code：python文件(部分)
-data：数据存放文件夹
-notebookcode：jupyter notebook代码(主要代码)
+* SQL：数据提取代码
+* code：python文件(部分)
+* data：数据存放文件夹
+* notebookcode：jupyter notebook代码(主要代码)
